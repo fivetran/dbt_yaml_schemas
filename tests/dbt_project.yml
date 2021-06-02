@@ -34,7 +34,13 @@ quoting:
 models: {}
 seeds: {}
 snapshots: {}
-sources: {}
+sources:
+  package:
+    +enabled: true
+    source:
+      +enabled: true
+      table:
+        +enabled: true
 
 vars:
   name: value

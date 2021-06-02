@@ -3,6 +3,7 @@
   "$id": "https://gitcdn.xyz/repo/fivetran/dbt_yaml_schemas/main/schemas/dbt_project.json",
   "title": "dbt_project.yml",
   "description": "Describes the structure of dbt project",
+
   "type": "object",
   "properties": {
     "name": {
@@ -195,7 +196,20 @@
 
     "sources": {
       "type": "object",
-      "description": "Source configuration."
+      "description": "Source configuration.",
+      "additionalProperties": {
+        "$ref": "#/definitions/sourceConfig",
+        "description": "Package name.",
+        "additionalProperties": {
+          "$ref": "#/definitions/sourceConfig",
+          "description": "Source name.",
+          "additionalProperties": {
+            "$ref": "#/definitions/sourceConfig",
+            "description": "Table name.",
+            "additionalProperties": false
+          }
+        }
+      }
     },
 
     "vars": {
@@ -220,5 +234,18 @@
     }
   },
   "required": ["name", "version"],
-  "additionalProperties": false
+  "additionalProperties": false,
+
+  "definitions": {
+    "sourceConfig": {
+      "type": "object",
+      "properties": {
+        "+enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether sources are enabled for the package, source or table"
+        }
+      }
+    }
+  }
 }
