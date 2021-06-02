@@ -33,74 +33,42 @@
     "$comment": "Can default path be inserted automatically? Do we need minItems? Are some of these paths required?",
 
     "source-paths": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "$ref": "#/definitions/pathList",
       "description": "List of directories where models and sources are located.\nDefault: [models]."
     },
 
     "data-paths": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "$ref": "#/definitions/pathList",
       "description": "List of directories where seed files are located.\nDefault: [data]."
     },
 
     "test-paths": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "$ref": "#/definitions/pathList",
       "description": "List of directories where data tests are located.\nDefault: [test]."
     },
 
     "analysis-paths": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "$ref": "#/definitions/pathList",
       "description": "List of directories where analyses are located.\nWithout specifying this config, dbt will not compile any .sql files as analyses."
     },
 
     "macro-paths": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "$ref": "#/definitions/pathList",
       "description": "List of directories where macros are located. Note that you cannot co-locate models and macros.\nDefault: [macros]."
     },
 
     "snapshot-paths": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "$ref": "#/definitions/pathList",
       "description": "List of directories where snapshots are located. Note that you cannot co-locate models and snapshots.\nDefault: [snapshots]."
     },
 
     "docs-paths": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "$ref": "#/definitions/pathList",
       "description": "List of directories where docs blocks are located.\nBy default, dbt will search in all resource paths for docs blocks (i.e. the combined list of source-paths, data-paths, analysis-paths, macro-paths and snapshot-paths). If this option is configured, dbt will only look in the specified directory for docs blocks."
     },
 
     "asset-paths": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "$ref": "#/definitions/pathList",
       "description": "List of directories to copy to the target directory as part of the docs generate command. This is useful for rendering images in your repository in your project documentation\nBy default, dbt will not compile any additional files as part of 'docs generate'"
     },
 
@@ -126,11 +94,7 @@
     },
 
     "clean-targets": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "$ref": "#/definitions/pathList",
       "description": "A list of directories to be removed by the 'dbt clean' command. As such, you should only include directories containing artifacts (e.g. compiled files, logs, installed packages) in this list.\nIf this configuration is not specified, the 'clean' command will remove files in your target-path."
     },
 
@@ -239,6 +203,14 @@
   "additionalProperties": false,
 
   "definitions": {
+    "pathList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+
     "resourceConfig": {
       "properties": {
         "enabled": {
