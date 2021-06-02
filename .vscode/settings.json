@@ -1,6 +1,6 @@
 {
   "yaml.schemas": {
-    "./schemas/packages.json": "./test/packages.yaml"
+    "./schemas/packages.json": "tests/packages.yml"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.configPath": ".prettierrc",
