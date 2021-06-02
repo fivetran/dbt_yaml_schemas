@@ -1,0 +1,29 @@
+dbtVersion: 0.19.1
+
+jobs:
+  - name: daily
+    targetName: dev
+    schedule: 0 12 * * *
+    steps:
+      - name: run models
+        command: dbt run
+      - name: run models
+        command: dbt test
+
+  - name: nightly
+    schedule: 0 0 * * *
+    steps:
+      - name: run models
+        command: dbt run --models my_first_model my_second_model
+
+  - name: weekdays
+    schedule: 30 7 * * 1-5
+    steps:
+      - name: run models
+        command: dbt run
+
+  - name: every30minutes
+    schedule: "*/30 * * * *"
+    steps:
+      - name: version
+        command: dbt --version

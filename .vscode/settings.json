@@ -1,7 +1,8 @@
 {
   "yaml.schemas": {
     "./schemas/packages.json": "tests/packages.yml",
-    "./schemas/dbt_project.json": "tests/dbt_project.yml"
+    "./schemas/dbt_project.json": "tests/dbt_project.yml",
+    "./schemas/deployment.json": "tests/deployment.yml"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.configPath": ".prettierrc",
