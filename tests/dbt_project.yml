@@ -70,7 +70,24 @@ seeds:
       +schema: schema
       +tags: ["a", "b"]
 
-snapshots: {}
+snapshots:
+  +target_schema: schema
+  folder:
+    +target_schema: schema
+    subfolder:
+      +target_schema: schema
+      +target_database: database
+      +unique_key: id
+      +strategy: check
+      +updated_at: updated_at
+      +check_cols: all
+      +enabled: true
+      +persist_docs:
+        columns: true
+        relation: true
+      +post-hook: SQL
+      +pre-hook: SQL
+      +tags: [a, b]
 
 sources:
   package:

@@ -156,8 +156,7 @@
     },
 
     "snapshots": {
-      "type": "object",
-      "description": "Snapshot configuration."
+      "$ref": "#/definitions/snapshotConfig"
     },
 
     "sources": {
@@ -316,6 +315,108 @@
       },
       "additionalProperties": {
         "$ref": "#/definitions/modelConfig"
+      }
+    },
+
+    "snapshotConfig": {
+      "type": "object",
+      "description": "Snapshot configuration.",
+      "oneOf": [
+        {
+          "properties": {
+            "+strategy": {
+              "const": "timestamp"
+            }
+          },
+          "required": ["+updated_at"]
+        },
+        {
+          "properties": {
+            "+strategy": {
+              "const": "check"
+            }
+          },
+          "required": ["+check_cols"]
+        },
+        {
+          "properties": {
+            "+strategy": {
+              "not": { "enum": ["timestamp", "check"] }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "+target_schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The schema that dbt should build a snapshot table into. Snapshots build into the same target_schema, no matter who is running them.\nOn BigQuery, this is analogous to a dataset.\nThis is a required parameter, no default is provided."
+        },
+        "+target_database": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The database that dbt should build a snapshot table into.\nThe specified database must already exist.\nOn BigQuery, this is analogous to a project.\nOn Redshift, cross-database queries are not possible. Do not use this parameter on Redshift.\nBy default, dbt will use the target database associated with your profile/connection."
+        },
+        "+unique_key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A column name or expression that is unique for the results of a snapshot. dbt uses this to match records between a result set and an existing snapshot, so that changes can be captured correctly.\nThis is a required parameter. No default is provided."
+        },
+        "+strategy": {
+          "type": "string",
+          "minLength": 1,
+          "anyOf": [
+            {
+              "const": "timestamp",
+              "description": "The timestamp strategy uses an updated_at field to determine if a row has changed. If the configured updated_at column for a row is more recent than the last time the snapshot ran, then dbt will invalidate the old record and record the new one. If the timestamps are unchanged, then dbt will not take any action."
+            },
+            {
+              "const": "check",
+              "description": "The check strategy is useful for tables which do not have a reliable updated_at column. This strategy works by comparing a list of columns between their current and historical values. If any of these columns have changed, then dbt will invalidate the old record and record the new one. If the column values are identical, then dbt will not take any action."
+            },
+            {
+              "$comment": "It is possible to implement a custom strategy: https://docs.getdbt.com/reference/resource-configs/strategy#advanced-define-and-use-custom-snapshot-strategy"
+            }
+          ],
+          "description": "The snapshot strategy dbt should use to detect record changes.\nThis is a required configuration. There is no default value."
+        },
+        "+updated_at": {
+          "type": "string",
+          "description": "A column within the results of your snapshot query that represents when the record row was last updated.\nThis parameter is required if using the 'timestamp' strategy."
+        },
+        "+check_cols": {
+          "oneOf": [
+            {
+              "const": "all"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          ],
+          "description": "A list of columns within the results of your snapshot query to check for changes.\nAlternatively, use all columns using the 'all' value (however this may be less performant).\nThis parameter is required if using the 'check' strategy."
+        },
+        "+enabled": {
+          "$ref": "#/definitions/resourceConfig/properties/enabled"
+        },
+        "+tags": {
+          "$ref": "#/definitions/resourceConfig/properties/tags"
+        },
+        "+pre-hook": {
+          "$ref": "#/definitions/resourceConfig/properties/pre-hook"
+        },
+        "+post-hook": {
+          "$ref": "#/definitions/resourceConfig/properties/post-hook"
+        },
+        "+persist_docs": {
+          "$ref": "#/definitions/resourceConfig/properties/persist_docs"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/snapshotConfig"
       }
     },
 
