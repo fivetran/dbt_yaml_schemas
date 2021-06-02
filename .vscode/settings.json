@@ -1,8 +1,8 @@
 {
-    "yaml.schemas": {
-        "./schemas/packages.json": "./test/packages.yaml"
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "prettier.configPath": ".prettierrc",
-    "editor.formatOnSave": true
+  "yaml.schemas": {
+    "./schemas/packages.json": "./test/packages.yaml"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.configPath": ".prettierrc",
+  "editor.formatOnSave": true
 }
