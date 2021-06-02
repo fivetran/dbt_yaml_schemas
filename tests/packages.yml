@@ -1,0 +1,4 @@
+packages:
+  - package: fishtown-analytics/snowplow
+    version: [">=0.7.0", "<0.8.0"]
+    

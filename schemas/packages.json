@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "JSON Schema for Hadolint, a Dockerfile linter tool",
+    "description": "Dockerfile linter, validate inline bash, written in Haskell",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {},
+    "trustedRegistries": {
+        "type": "array",
+        "description": "A list of trusted registries. Ex: docker.io",
+        "items": {
+            "type": "string"
+        }
+    }
+}
