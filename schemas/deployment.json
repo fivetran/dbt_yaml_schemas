@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gitcdn.xyz/repo/fivetran/dbt_yaml_schemas/main/schemas/deployment.json",
   "title": "Fivetran dbt deployment.yml file",
   "description": "Describes the jobs that enable Fivetran to run your dbt commands on a schedule",
   "type": "object",
@@ -7,20 +8,13 @@
   "properties": {
     "dbtVersion": {
       "type": "string",
-      "description": "Choose the version of dbt that will run the project. Supported versions are listed in https://fivetran.com/docs/transformations/dbt/setup-guide#prerequisites.\n If the version is not specified, dbt 0.18.0 will be used.",
-      "oneOf": [
-        { "const": "0.18.0" },
-        { "const": "0.18.1" },
-        { "const": "0.18.2" },
-        { "const": "0.19.0" },
-        { "const": "0.19.1" }
-      ]
+      "enum": ["0.18.0", "0.18.1", "0.18.2", "0.19.0", "0.19.1"],
+      "description": "The version of dbt that will run the project. Supported versions are listed in https://fivetran.com/docs/transformations/dbt/setup-guide#prerequisites \n If the version is not specified, dbt 0.18.0 will be used."
     },
 
     "jobs": {
       "type": "array",
       "minItems": 1,
-      "uniqueItems": true,
       "items": {
         "type": "object",
         "properties": {
@@ -31,6 +25,7 @@
 
           "targetName": {
             "type": "string",
+            "default": "prod",
             "description": "The name of the target that will be used when running the job. If it's not specified, the target will be named 'prod'."
           },
 
@@ -42,19 +37,18 @@
           "steps": {
             "type": "array",
             "minItems": 1,
-            "uniqueItems": true,
             "items": {
               "type": "object",
               "properties": {
                 "name": {
                   "type": "string",
-                  "description": "Give each step a unique name. The name will be displayed in the Fivetran dashboard. Step names must be unique."
+                  "description": "The name that will be displayed in the Fivetran dashboard. Step names must be unique."
                 },
 
                 "command": {
                   "type": "string",
                   "description": "The dbt command that should run in this step.\nFor a list of available commands visit https://docs.getdbt.com/reference/model-selection-syntax.",
-                  "minLength": 3,
+                  "pattern": "^dbt\\s+\\S+",
                   "anyOf": [
                     {
                       "const": "dbt run",
