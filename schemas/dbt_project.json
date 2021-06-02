@@ -181,7 +181,10 @@
 
     "models": {
       "type": "object",
-      "description": "Model configuration."
+      "description": "Model configuration.",
+      "additionalProperties": {
+        "$ref": "#/definitions/modelConfig"
+      }
     },
 
     "seeds": {
@@ -237,6 +240,82 @@
   "additionalProperties": false,
 
   "definitions": {
+    "modelConfig": {
+      "type": "object",
+      "properties": {
+        "+materialized": {
+          "type": "string",
+          "description": "Materialization name"
+        },
+        "+sql_header": {
+          "type": "string",
+          "description": "A custom SQL that can be injected above the 'create table as' and 'create view as' statements that dbt executes when building models and snapshots"
+        },
+        "+enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "When a resource is disabled, dbt will not consider it as part of your project. Note that this can cause compilation errors."
+        },
+        "+tags": {
+          "type": ["string", "array"],
+          "items": {
+            "type": "string"
+          },
+          "description": "Tags used to select resources"
+        },
+        "+pre-hook": {
+          "type": ["string", "array"],
+          "items": {
+            "type": "string"
+          },
+          "description": "A SQL statement or list of SQL statements to be run before a model, seed or snapshot is built.\nPre-hooks can also call macros that return SQL statements."
+        },
+        "+post-hook": {
+          "type": ["string", "array"],
+          "items": {
+            "type": "string"
+          },
+          "description": "A SQL statement or list of SQL statements to be run after a model, seed or snapshot is built.\nPost-hooks can also call macros that return SQL statements."
+        },
+        "+database": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A custom database for a model or seed"
+        },
+        "+schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A custom schema for a model or seed"
+        },
+        "+alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A custom alias for a model or seed"
+        },
+        "+persist_docs": {
+          "type": "object",
+          "properties": {
+            "relation": {
+              "type": "boolean",
+              "description": "Persist resource descriptions as relation comments in the database."
+            },
+            "columns": {
+              "type": "boolean",
+              "description": "Persist resource descriptions as column comments in the database."
+            }
+          },
+          "description": "Persist resource descriptions as column and relation comments in the database."
+        },
+        "+full_refresh": {
+          "type": "boolean",
+          "description": "Sets a resource to always or never full-refresh. The configured value takes precedence over the presence or absence of the '--full-refresh' flag."
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/modelConfig"
+      }
+    },
+
     "sourceConfig": {
       "type": "object",
       "properties": {
