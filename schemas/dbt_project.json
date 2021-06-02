@@ -188,8 +188,7 @@
     },
 
     "seeds": {
-      "type": "object",
-      "description": "Seed configuration."
+      "$ref": "#/definitions/seedConfig"
     },
 
     "snapshots": {
@@ -240,59 +239,50 @@
   "additionalProperties": false,
 
   "definitions": {
-    "modelConfig": {
-      "type": "object",
+    "resourceConfig": {
       "properties": {
-        "+materialized": {
-          "type": "string",
-          "description": "Materialization name"
-        },
-        "+sql_header": {
-          "type": "string",
-          "description": "A custom SQL that can be injected above the 'create table as' and 'create view as' statements that dbt executes when building models and snapshots"
-        },
-        "+enabled": {
+        "enabled": {
           "type": "boolean",
           "default": true,
           "description": "When a resource is disabled, dbt will not consider it as part of your project. Note that this can cause compilation errors."
         },
-        "+tags": {
+        "tags": {
           "type": ["string", "array"],
           "items": {
             "type": "string"
           },
           "description": "Tags used to select resources"
         },
-        "+pre-hook": {
+        "pre-hook": {
           "type": ["string", "array"],
           "items": {
             "type": "string"
           },
           "description": "A SQL statement or list of SQL statements to be run before a model, seed or snapshot is built.\nPre-hooks can also call macros that return SQL statements."
         },
-        "+post-hook": {
+        "post-hook": {
           "type": ["string", "array"],
           "items": {
             "type": "string"
           },
           "description": "A SQL statement or list of SQL statements to be run after a model, seed or snapshot is built.\nPost-hooks can also call macros that return SQL statements."
         },
-        "+database": {
+        "database": {
           "type": "string",
           "minLength": 1,
           "description": "A custom database for a model or seed"
         },
-        "+schema": {
+        "schema": {
           "type": "string",
           "minLength": 1,
           "description": "A custom schema for a model or seed"
         },
-        "+alias": {
+        "alias": {
           "type": "string",
           "minLength": 1,
           "description": "A custom alias for a model or seed"
         },
-        "+persist_docs": {
+        "persist_docs": {
           "type": "object",
           "properties": {
             "relation": {
@@ -306,13 +296,105 @@
           },
           "description": "Persist resource descriptions as column and relation comments in the database."
         },
-        "+full_refresh": {
+        "full_refresh": {
           "type": "boolean",
           "description": "Sets a resource to always or never full-refresh. The configured value takes precedence over the presence or absence of the '--full-refresh' flag."
+        }
+      }
+    },
+
+    "modelConfig": {
+      "type": "object",
+      "properties": {
+        "+materialized": {
+          "type": "string",
+          "description": "Materialization name"
+        },
+        "+sql_header": {
+          "type": "string",
+          "description": "A custom SQL that can be injected above the 'create table as' and 'create view as' statements that dbt executes when building models and snapshots"
+        },
+        "+enabled": {
+          "$ref": "#/definitions/resourceConfig/properties/enabled"
+        },
+        "+tags": {
+          "$ref": "#/definitions/resourceConfig/properties/tags"
+        },
+        "+pre-hook": {
+          "$ref": "#/definitions/resourceConfig/properties/pre-hook"
+        },
+        "+post-hook": {
+          "$ref": "#/definitions/resourceConfig/properties/post-hook"
+        },
+        "+database": {
+          "$ref": "#/definitions/resourceConfig/properties/database"
+        },
+        "+schema": {
+          "$ref": "#/definitions/resourceConfig/properties/schema"
+        },
+        "+alias": {
+          "$ref": "#/definitions/resourceConfig/properties/alias"
+        },
+        "+persist_docs": {
+          "$ref": "#/definitions/resourceConfig/properties/persist_docs"
+        },
+        "+full_refresh": {
+          "$ref": "#/definitions/resourceConfig/properties/full_refresh"
         }
       },
       "additionalProperties": {
         "$ref": "#/definitions/modelConfig"
+      }
+    },
+
+    "seedConfig": {
+      "type": "object",
+      "description": "Seed configuration.",
+      "properties": {
+        "+quote_columns": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether column names in the seed file should be quoted when the table is created."
+        },
+        "+column_types": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Column name."
+          },
+          "description": "The database types of columns in a seed; a dictionary where the keys are the column names, and the values are a valid datatype (this varies across databases).\nWithout specifying this, dbt will infer the datatype based on the column values in your seed file."
+        },
+        "+enabled": {
+          "$ref": "#/definitions/resourceConfig/properties/enabled"
+        },
+        "+tags": {
+          "$ref": "#/definitions/resourceConfig/properties/tags"
+        },
+        "+pre-hook": {
+          "$ref": "#/definitions/resourceConfig/properties/pre-hook"
+        },
+        "+post-hook": {
+          "$ref": "#/definitions/resourceConfig/properties/post-hook"
+        },
+        "+database": {
+          "$ref": "#/definitions/resourceConfig/properties/database"
+        },
+        "+schema": {
+          "$ref": "#/definitions/resourceConfig/properties/schema"
+        },
+        "+alias": {
+          "$ref": "#/definitions/resourceConfig/properties/alias"
+        },
+        "+persist_docs": {
+          "$ref": "#/definitions/resourceConfig/properties/persist_docs"
+        },
+        "+full_refresh": {
+          "$ref": "#/definitions/resourceConfig/properties/full_refresh"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/seedConfig"
       }
     },
 

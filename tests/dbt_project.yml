@@ -49,8 +49,27 @@ models:
       +sql_header: sql
       +tags: ["a", "b"]
 
+seeds:
+  +quote_columns: false
+  folder:
+    +quote_columns: true
+    subfolder:
+      +quote_columns: false
+      +column_types:
+        id: int
+        name: text
+      +enabled: true
+      +alias: alias
+      +database: database
+      +full_refresh: false
+      +persist_docs:
+        columns: true
+        relation: true
+      +post-hook: SQL
+      +pre-hook: SQL
+      +schema: schema
+      +tags: ["a", "b"]
 
-seeds: {}
 snapshots: {}
 
 sources:
