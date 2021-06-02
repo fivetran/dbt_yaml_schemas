@@ -1,15 +1,88 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "JSON Schema for Hadolint, a Dockerfile linter tool",
-  "description": "Dockerfile linter, validate inline bash, written in Haskell",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gitcdn.xyz/repo/fivetran/dbt_yaml_schemas/main/schemas/packages.json",
+  "title": "YML Schema for DBT packages file",
+  "description": "Will be filled later",
   "type": "object",
   "additionalProperties": false,
-  "properties": {},
-  "trustedRegistries": {
-    "type": "array",
-    "description": "A list of trusted registries. Ex: docker.io",
-    "items": {
-      "type": "string"
+  "properties": {
+    "packages": {
+      "type": "array",
+      "minItems": 1,
+      "description": "A list of Dbt packages",
+      "items": {
+        "type": "object",
+        "anyOf": [
+          { "$ref": "#/definitions/dbtHubPackage" },
+          { "$ref": "#/definitions/gitPackage" },
+          { "$ref": "#/definitions/localPackage" }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "semVer": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 14,
+      "pattern": "^(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)$",
+      "description": "Semantic version"
+    },
+    "dbtHubPackage": {
+      "properties": {
+        "package": {
+          "type": "string",
+          "description": "DbtHub registry name of a package"
+        },
+        "version": {
+          "oneOf": [
+            { "$ref": "#/definitions/semVer" },
+            {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 2,
+              "items": { "type": "string" },
+              "description": "Version range"
+            }
+          ],
+          "description": "Version number or range"
+        }
+      },
+      "required": ["package"],
+      "dependencies": {
+        "version": ["package"]
+      }
+    },
+    "gitPackage": {
+      "properties": {
+        "git": {
+          "type": "string",
+          "description": "Git URL"
+        },
+        "revision": {
+          "type": ["string", "number"],
+          "description": "Git repository tag or branch name"
+        },
+        "warn-unpinned": {
+          "type": "boolean",
+          "description": "Enable warning about unpinned repositories. Note: It is not recommended to disable it."
+        }
+      },
+      "required": ["git"],
+      "dependencies": {
+        "revision": ["git"],
+        "warn-unpinned": ["git"],
+        "version": ["git"]
+      }
+    },
+    "localPackage": {
+      "properties": {
+        "local": {
+          "type": "string",
+          "description": "Path to a local package"
+        }
+      },
+      "required": ["local"]
     }
   }
 }

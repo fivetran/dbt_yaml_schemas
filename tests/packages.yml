@@ -1,3 +1,19 @@
 packages:
   - package: fishtown-analytics/snowplow
+    version: 0.7.3
+
+  - package: fishtown-analytics/snowplow
     version: [">=0.7.0", "<0.8.0"]
+
+  - git: "https://github.com/fishtown-analytics/dbt-utils.git"
+    revision: 0.1.21
+
+  - git: "git@github.com:fishtown-analytics/dbt-utils.git"
+
+  - git: "https://{{env_var('GIT_CREDENTIALS')}}@github.com/fishtown-analytics/dbt-utils.git"
+    revision: "master"
+
+  - local: /opt/dbt/redshift
+
+  - git: https://github.com/fishtown-analytics/dbt-utils.git
+    warn-unpinned: false
