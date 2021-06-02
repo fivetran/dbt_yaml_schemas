@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/product.schema.json",
+  "title": "dbt_project.yml",
+  "description": "Describes the structure of dbt project",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[^\\d\\W]\\w*$",
+      "description": "The name of a dbt project. Must be letters, digits and underscores only, and cannot start with a digit."
+    },
+
+    "config-version": {
+      "type": "number",
+      "default": 2,
+      "minimum": 1,
+      "description": "Specify 2 to use the v2 project structure.\nWithout this configuration, dbt will assume your dbt_project.yml uses the version 1 syntax, which was deprecated in dbt v0.19.0."
+    },
+
+    "version": {
+      "type": "string",
+      "description": "The version of a dbt project. Note that while this is a required parameter, it is not currently meaningfully used by dbt.\nThe version must be in a semantic version format, e.g. 1.0.0.",
+      "$comment": "Validate with regex?"
+    },
+
+    "profile": {
+      "type": "string",
+      "description": "The profile your dbt project should use to connect to your data warehouse.\nIf you are developing in dbt Cloud, this configuration is optional\nIf you are developing locally, this configuration is required, unless a command-line option (i.e. '--profile') is supplied."
+    },
+
+    "$comment": "Can default path be inserted automatically? Do we need minItems? Are some of these paths required?",
+
+    "source-paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of directories where models and sources are located.\nDefault: [models]."
+    },
+
+    "data-paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of directories where seed files are located.\nDefault: [data]."
+    },
+
+    "test-paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of directories where data tests are located.\nDefault: [test]."
+    },
+
+    "analysis-paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of directories where analyses are located.\nWithout specifying this config, dbt will not compile any .sql files as analyses."
+    },
+
+    "macro-paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of directories where macros are located. Note that you cannot co-locate models and macros.\nDefault: [macros]."
+    },
+
+    "snapshot-paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of directories where snapshots are located. Note that you cannot co-locate models and snapshots.\nDefault: [snapshots]."
+    },
+
+    "docs-paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of directories where docs blocks are located.\nBy default, dbt will search in all resource paths for docs blocks (i.e. the combined list of source-paths, data-paths, analysis-paths, macro-paths and snapshot-paths). If this option is configured, dbt will only look in the specified directory for docs blocks."
+    },
+
+    "asset-paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of directories to copy to the target directory as part of the docs generate command. This is useful for rendering images in your repository in your project documentation\nBy default, dbt will not compile any additional files as part of 'docs generate'"
+    },
+
+    "target-path": {
+      "type": "string",
+      "minLength": 1,
+      "default": "target",
+      "description": "A directory where compiled files will be written when you run the 'dbt run', 'dbt compile', or 'dbt test' command."
+    },
+
+    "log-path": {
+      "type": "string",
+      "minLength": 1,
+      "default": "logs",
+      "description": "A directory where dbt will write logs."
+    },
+
+    "modules-path": {
+      "type": "string",
+      "minLength": 1,
+      "default": "dbt_modules",
+      "description": "A directory where packages are installed when you run the 'dbt deps' command. Note that this directory is usually git-ignored."
+    },
+
+    "clean-targets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "A list of directories to be removed by the 'dbt clean' command. As such, you should only include directories containing artifacts (e.g. compiled files, logs, installed packages) in this list.\nIf this configuration is not specified, the 'clean' command will remove files in your target-path."
+    },
+
+    "query-comment": {
+      "type": ["string", "object"],
+      "properties": {
+        "comment": {
+          "type": "string",
+          "description": "The string to be injected to a query as a comment."
+        },
+        "append": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether a comment should be appended (added to the bottom of a query) or not (i.e. added to the top of a query)."
+        }
+      },
+      "additionalProperties": false,
+      "description": "A string to inject as a comment in each query that dbt runs against your database. This comment can be used to attribute SQL statements to specific dbt resources like models and tests.\nThe query-comment configuration can also call a macro that returns a string.\nBy default, dbt will insert a JSON comment at the top of your query containing the information including the dbt version, profile and target names, and node ids for the resources it runs."
+    },
+
+    "require-dbt-version": {
+      "type": ["string", "array"],
+      "minLength": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "description": "A range of dbt versions that a project is compatible with.\nIf this configuration is not specified, no version check will occur."
+    },
+
+    "quoting": {
+      "type": "object",
+      "properties": {
+        "database": {
+          "type": "boolean"
+        },
+        "schema": {
+          "type": "boolean"
+        },
+        "identifier": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Whether dbt should quote databases, schemas, and identifiers when creating relations (tables/views) or when resolving a ref function to a direct relation reference.\nThe default values vary by database.\nNote that for BigQuery quoting configuration, 'database' and 'schema' should be used here, though these configs will apply to project and dataset names respectively."
+    },
+
+    "models": {
+      "type": "object",
+      "description": "Model configuration."
+    },
+
+    "seeds": {
+      "type": "object",
+      "description": "Seed configuration."
+    },
+
+    "snapshots": {
+      "type": "object",
+      "description": "Snapshot configuration."
+    },
+
+    "sources": {
+      "type": "object",
+      "description": "Source configuration."
+    },
+
+    "vars": {
+      "type": "object",
+      "description": "Variables that can be passed into models during compilation.\nThey are useful for configuring packages for deployment in multiple environments, or defining values that should be used across multiple models within a package.\nTo add a variable to a model, use the var() function."
+    },
+
+    "on-run-start": {
+      "type": ["string", "array"],
+      "items": {
+        "type": "string"
+      },
+      "description": "A SQL statement or list of SQL statements to be run at the start of the following commands: 'dbt run', 'dbt seed', 'dbt snapshot'.\n on-run-start hook can also call macros that return SQL statements."
+    },
+
+    "on-run-end": {
+      "type": ["string", "array"],
+      "items": {
+        "type": "string"
+      },
+      "description": "A SQL statement or list of SQL statements to be run at the end of the following commands: 'dbt run', 'dbt seed', 'dbt snapshot'.\n on-run-end hook can also call macros that return SQL statements."
+    }
+  },
+  "required": ["name", "version"],
+  "additionalProperties": false
+}

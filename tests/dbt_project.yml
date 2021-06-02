@@ -1,0 +1,43 @@
+name: my_project
+config-version: 2
+version: 1.2.3
+profile: default
+
+source-paths: [models]
+analysis-paths: [analysis]
+test-paths: [tests]
+data-paths: [data]
+macro-paths: [macros]
+snapshot-paths: [snapshots]
+asset-paths: [assets]
+docs-paths: [docs]
+
+target-path: target
+clean-targets:
+  - target
+  - dbt_modules
+
+log-path: logs
+modules-path: modules
+
+query-comment:
+  append: false
+  comment: comment
+
+require-dbt-version: 0.18.0
+
+quoting:
+  database: true
+  schema: true
+  identifier: true
+
+models: {}
+seeds: {}
+snapshots: {}
+sources: {}
+
+vars:
+  name: value
+
+on-run-start: SELECT 1
+on-run-end: SELECT 1
