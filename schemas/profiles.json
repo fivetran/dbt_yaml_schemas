@@ -49,7 +49,8 @@
                 { "$ref": "#definitions/redshiftProfile" },
                 { "$ref": "#definitions/bigQueryProfile" },
                 { "$ref": "#definitions/snowflakeProfile" },
-                { "$ref": "#definitions/sparkProfile" }
+                { "$ref": "#definitions/sparkProfile" },
+                { "$ref": "#definitions/prestoProfile" }
               ]
             },
             "required": [".*"]
@@ -328,8 +329,7 @@
           "description": "The role to assume when running queries as the specified user."
         },
         "database": {
-          "type": "string",
-          "description": "The database that dbt should create models in."
+          "$ref": "#definitions/database"
         },
         "warehouse": {
           "type": "string",
@@ -485,6 +485,47 @@
         }
       ]
     },
+    "prestoProfile": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#definitions/passwordField" },
+        { "$ref": "#definitions/threadsField" }
+      ],
+      "properties": {
+        "type": {
+          "const": "presto",
+          "description": "Presto Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/presto-profile"
+        },
+        "method": {
+          "enum": ["none", "ldap", "kerberos"]
+        },
+        "user": {
+          "type": "string"
+        },
+        "database": {
+          "$ref": "#definitions/database"
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "schema": {
+          "type": "string",
+          "description": "The schema to build models into."
+        }
+      },
+      "required": [
+        "type",
+        "user",
+        "password",
+        "database",
+        "host",
+        "port",
+        "schema"
+      ]
+    },
     "common": {
       "type": "object",
       "allOf": [{ "$ref": "#definitions/threadsField" }],
@@ -554,6 +595,10 @@
           "description": "The location of BigQuery datasets can be configured using the location configuration in a BigQuery profile. location may be iether a multi-regional location (e.g. EU, US), or a regional location (e.g. us-west2) as per the the BigQuery documentation describes."
         }
       }
+    },
+    "database": {
+      "type": "string",
+      "description": "The database that dbt should create models in."
     }
   }
 }

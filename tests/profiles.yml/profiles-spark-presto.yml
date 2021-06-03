@@ -1,0 +1,18 @@
+config:
+  partial_parse: false
+  use_colors: false
+  printer_width: 10
+  send_anonymous_usage_stats: false
+fivetran:
+  target: dev
+  outputs:
+    dev:
+      type: presto
+      method: none # optional, one of {none | ldap | kerberos}
+      user: user
+      password: password # required if method is ldap or kerberos
+      database: database
+      host: hostname
+      port: 1234
+      schema: schema
+      threads: 1
