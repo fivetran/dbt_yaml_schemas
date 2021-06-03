@@ -40,6 +40,7 @@
           "type": "string",
           "description": "This is the default target your dbt project will use. It must be one of the targets you define in your profile. Commonly it is set to dev."
         },
+
         "outputs": {
           "type": "object",
           "patternProperties": {
@@ -52,8 +53,7 @@
                 { "$ref": "#definitions/sparkProfile" },
                 { "$ref": "#definitions/prestoProfile" }
               ]
-            },
-            "required": [".*"]
+            }
           }
         }
       },
@@ -68,19 +68,23 @@
         { "$ref": "#definitions/passwordField" },
         { "$ref": "#definitions/keepalivesIdleField" }
       ],
+
       "properties": {
         "type": {
           "const": "postgres",
           "description": "Postgres Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/postgres-profile"
         },
+
         "search_path": {
           "type": "string",
           "description": "Controls the Postgres \"search path\" that dbt configures when opening new connections to the database. By default, the Postgres search path is \"$user, public\", meaning that unqualified table names will be searched for in the public schema, or a schema with the same name as the logged-in user. Note: Setting the search_path to a custom value is not necessary or recommended for typical usage of dbt."
         },
+
         "role": {
           "type": "string",
           "description": "Controls the Postgres role that dbt assumes when opening new connections to the database."
         },
+
         "sslmode": {
           "type": "string",
           "description": "Controls how dbt connectes to Postgres databases using SSL. See the Postgres docs on sslmode for usage information. When unset, dbt will connect to databases using the Postgres default, prefer, as the sslmode."
@@ -93,15 +97,18 @@
         { "$ref": "#definitions/common" },
         { "$ref": "#definitions/keepalivesIdleField" }
       ],
+
       "properties": {
         "type": {
           "const": "redshift",
           "description": "Redshift Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/redshift-profile"
         },
+
         "search_path": {
           "type": "string",
           "default": "public"
         },
+
         "sslmode": {
           "type": "string",
           "description": "Sets the sslmode used to connect to the database (in case this parameter is set, will look for ca in ~/.postgresql/root.crt)"
@@ -116,16 +123,20 @@
           "cluster_id": {
             "type": "string"
           },
+
           "iam_profile": {
             "type": "string",
             "description": "When value is set, dbt will use the specified profile from your ~/.aws/config file instead of using the profile name default."
           },
+
           "iam_duration_seconds": {
             "type": "integer"
           },
+
           "autocreate": {
             "type": "boolean"
           },
+
           "db_groups": {
             "type": "array"
           }
@@ -316,34 +327,42 @@
           "const": "snowflake",
           "description": "Snowflake Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/snowflake-profile"
         },
+
         "account": {
           "type": "string",
           "description": "The account to connect to as per Snowflake's documentation."
         },
+
         "user": {
           "type": "string",
           "description": "The user to log in as."
         },
+
         "role": {
           "type": "string",
           "description": "The role to assume when running queries as the specified user."
         },
+
         "database": {
           "$ref": "#definitions/database"
         },
+
         "warehouse": {
           "type": "string",
           "description": "The warehouse to use when building models."
         },
+
         "schema": {
           "type": "string",
           "description": "The schema to build models into by default. Can be overridden with custom schemas."
         },
+
         "client_session_keep_alive": {
           "type": "boolean",
           "default": false,
           "description": "If provided, issue a periodic select statement to keep the connection open when particularly long-running queries are executing (> 4 hours). Default: False (see note below)."
         },
+
         "query_tag": {
           "type": "string",
           "description": "A value with which to tag all queries, for later searching in QUERY_HISTORY view."
@@ -366,6 +385,7 @@
               "type": "string",
               "description": "path/to/private.key"
             },
+
             "private_key_passphrase": {
               "type": "string",
               "description": "passphrase for the private key, if key is encrypted"
@@ -391,16 +411,20 @@
           "const": "spark",
           "description": "Apache Spark Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/spark-profile"
         },
+
         "schema": {
           "type": "string",
           "description": "The schema to build models into."
         },
+
         "host": {
           "type": "string"
         },
+
         "port": {
           "type": "integer"
         },
+
         "user": {
           "type": "string"
         }
@@ -413,14 +437,17 @@
               "const": "odbc",
               "description": "Use the odbc connection method if you are connecting to a Databricks SQL endpoint or interactive cluster via ODBC driver."
             },
+
             "driver": {
               "type": "string",
               "description": "path/to/driver"
             },
+
             "organization": {
               "type": "string",
               "description": "Organization id. Used for Azure Databricks only."
             },
+
             "token": {
               "type": "string"
             }
@@ -433,6 +460,7 @@
               },
               "required": ["endpoint"]
             },
+
             {
               "properties": {
                 "cluster": { "type": "string" }
@@ -447,9 +475,11 @@
               "const": "thrift",
               "description": "Use the thrift connection method if you are connecting to a Thrift server sitting in front of a Spark cluster, e.g. a cluster running locally or on Amazon EMR."
             },
+
             "auth": {
               "type": "string"
             },
+
             "kerberos_service_name": {
               "type": "string"
             }
@@ -462,20 +492,25 @@
               "const": "http",
               "description": "Use the http method if your Spark provider supports generic connections over HTTP (e.g. Databricks interactive cluster)."
             },
+
             "organization": {
               "type": "string",
               "description": "Organization id. Used for Azure Databricks only."
             },
+
             "token": {
               "type": "string"
             },
+
             "cluster": {
               "type": "string"
             },
+
             "connect_timeout": {
               "type": "integer",
               "description": "Databricks interactive clusters can take several minutes to start up. You may include the optional profile configs connect_timeout and connect_retries, and dbt will periodically retry the connection."
             },
+
             "connect_retries": {
               "type": "integer",
               "description": "Databricks interactive clusters can take several minutes to start up. You may include the optional profile configs connect_timeout and connect_retries, and dbt will periodically retry the connection."
@@ -491,26 +526,33 @@
         { "$ref": "#definitions/passwordField" },
         { "$ref": "#definitions/threadsField" }
       ],
+
       "properties": {
         "type": {
           "const": "presto",
           "description": "Presto Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/presto-profile"
         },
+
         "method": {
           "enum": ["none", "ldap", "kerberos"]
         },
+
         "user": {
           "type": "string"
         },
+
         "database": {
           "$ref": "#definitions/database"
         },
+
         "host": {
           "type": "string"
         },
+
         "port": {
           "type": "integer"
         },
+
         "schema": {
           "type": "string",
           "description": "The schema to build models into."
@@ -529,19 +571,24 @@
     "common": {
       "type": "object",
       "allOf": [{ "$ref": "#definitions/threadsField" }],
+
       "properties": {
         "host": {
           "type": "string"
         },
+
         "user": {
           "type": "string"
         },
+
         "port": {
           "type": "integer"
         },
+
         "dbname": {
           "type": "string"
         },
+
         "schema": {
           "type": "string",
           "description": "The default schema that dbt will build objects in."
@@ -549,6 +596,7 @@
       },
       "required": ["type", "host", "user", "port", "dbname", "schema"]
     },
+
     "passwordField": {
       "type": "object",
       "properties": {
@@ -558,6 +606,7 @@
       },
       "required": ["password"]
     },
+
     "keepalivesIdleField": {
       "type": "object",
       "properties": {
@@ -568,6 +617,7 @@
       },
       "required": ["keepalives_idle"]
     },
+
     "threadsField": {
       "type": "object",
       "properties": {
@@ -578,6 +628,7 @@
         }
       }
     },
+
     "retriesField": {
       "type": "object",
       "properties": {
@@ -587,6 +638,7 @@
         }
       }
     },
+
     "locationField": {
       "type": "object",
       "properties": {
@@ -596,6 +648,7 @@
         }
       }
     },
+
     "database": {
       "type": "string",
       "description": "The database that dbt should create models in."
