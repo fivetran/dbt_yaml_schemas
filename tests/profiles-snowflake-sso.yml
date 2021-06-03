@@ -1,0 +1,23 @@
+config:
+  partial_parse: false
+  use_colors: false
+  printer_width: 10
+  send_anonymous_usage_stats: false
+fivetran:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: account
+      user: user
+      role: role
+
+      # SSO config
+      authenticator: externalbrowser
+
+      database: database
+      warehouse: warehouse
+      schema: schema
+      threads: 1
+      client_session_keep_alive: False
+      query_tag: query_tag

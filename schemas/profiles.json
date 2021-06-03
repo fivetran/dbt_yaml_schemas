@@ -47,7 +47,8 @@
               "oneOf": [
                 { "$ref": "#definitions/postgresProfile" },
                 { "$ref": "#definitions/redshiftProfile" },
-                { "$ref": "#definitions/bigQueryProfile" }
+                { "$ref": "#definitions/bigQueryProfile" },
+                { "$ref": "#definitions/snowflakeProfile" }
               ]
             },
             "required": [".*"]
@@ -305,6 +306,83 @@
         }
       ]
     },
+    "snowflakeProfile": {
+      "type": "object",
+      "allOf": [{ "$ref": "#definitions/threadsField" }],
+      "properties": {
+        "type": {
+          "const": "snowflake",
+          "description": "Snowflake Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/snowflake-profile"
+        },
+        "account": {
+          "type": "string",
+          "description": "The account to connect to as per Snowflake's documentation."
+        },
+        "user": {
+          "type": "string",
+          "description": "The user to log in as."
+        },
+        "role": {
+          "type": "string",
+          "description": "The role to assume when running queries as the specified user."
+        },
+        "database": {
+          "type": "string",
+          "description": "The database that dbt should create models in."
+        },
+        "warehouse": {
+          "type": "string",
+          "description": "The warehouse to use when building models."
+        },
+        "schema": {
+          "type": "string",
+          "description": "The schema to build models into by default. Can be overridden with custom schemas."
+        },
+        "client_session_keep_alive": {
+          "type": "boolean",
+          "default": false,
+          "description": "If provided, issue a periodic select statement to keep the connection open when particularly long-running queries are executing (> 4 hours). Default: False (see note below)."
+        },
+        "query_tag": {
+          "type": "string",
+          "description": "A value with which to tag all queries, for later searching in QUERY_HISTORY view."
+        }
+      },
+      "required": [
+        "type",
+        "account",
+        "user",
+        "database",
+        "warehouse",
+        "schema",
+        "query_tag"
+      ],
+      "oneOf": [
+        { "$ref": "#definitions/passwordField" },
+        {
+          "properties": {
+            "private_key_path": {
+              "type": "string",
+              "description": "path/to/private.key"
+            },
+            "private_key_passphrase": {
+              "type": "string",
+              "description": "passphrase for the private key, if key is encrypted"
+            }
+          },
+          "required": ["private_key_path", "private_key_passphrase"]
+        },
+        {
+          "properties": {
+            "authenticator": {
+              "type": "string",
+              "description": "Can be one of 'externalbrowser' or a valid Okta URL."
+            }
+          },
+          "required": ["authenticator"]
+        }
+      ]
+    },
     "common": {
       "type": "object",
       "allOf": [{ "$ref": "#definitions/threadsField" }],
@@ -355,8 +433,7 @@
           "default": 1,
           "description": "The number of threads the dbt project will run on."
         }
-      },
-      "required": ["threads"]
+      }
     },
     "retriesField": {
       "type": "object",

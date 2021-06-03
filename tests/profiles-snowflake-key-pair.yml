@@ -1,0 +1,24 @@
+config:
+  partial_parse: false
+  use_colors: false
+  printer_width: 10
+  send_anonymous_usage_stats: false
+fivetran:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: account
+      user: user
+      role: role
+
+      # Keypair config
+      private_key_path: path/to/private.key
+      private_key_passphrase: "passphrase for the private key, if key is encrypted"
+
+      database: database
+      warehouse: warehouse
+      schema: schema
+      threads: 1
+      client_session_keep_alive: False
+      query_tag: query_tag
