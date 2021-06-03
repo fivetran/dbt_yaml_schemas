@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gitcdn.xyz/repo/fivetran/dbt_yaml_schemas/main/schemas/dbt_project.json",
-  "title": "dbt_project.yml",
+  "title": "dbt dbt_project.yml",
   "description": "Describes the structure of dbt project",
 
   "type": "object",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gitcdn.xyz/repo/fivetran/dbt_yaml_schemas/main/schemas/deployment.json",
-  "title": "Fivetran dbt deployment.yml file",
+  "title": "Fivetran dbt deployment.yml",
   "description": "Describes the jobs that enable Fivetran to run your dbt commands on a schedule",
   "type": "object",
   "additionalProperties": false,
