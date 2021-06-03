@@ -1,0 +1,24 @@
+config:
+  partial_parse: false
+  use_colors: false
+  printer_width: 10
+  send_anonymous_usage_stats: false
+fivetran:
+  target: dev
+  outputs:
+    dev:
+      type: spark
+      method: odbc
+      driver: path/to/driver
+      schema: schema
+      host: yourorg.sparkhost.com
+      organization: organization # Azure Databricks only
+      token: abc123
+
+      # one of:
+      # endpoint: endpoint
+      cluster: cluster
+
+      # optional
+      port: 444 # default 443
+      user: user

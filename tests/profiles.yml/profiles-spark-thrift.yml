@@ -1,0 +1,19 @@
+config:
+  partial_parse: false
+  use_colors: false
+  printer_width: 10
+  send_anonymous_usage_stats: false
+fivetran:
+  target: dev
+  outputs:
+    dev:
+      type: spark
+      method: thrift
+      schema: schema
+      host: host
+
+      # optional
+      port: 1234 # default 10001
+      user: user
+      auth: KERBEROS
+      kerberos_service_name: hive

@@ -1,0 +1,22 @@
+config:
+  partial_parse: false
+  use_colors: false
+  printer_width: 10
+  send_anonymous_usage_stats: false
+fivetran:
+  target: dev
+  outputs:
+    dev:
+      type: spark
+      method: http
+      schema: schema
+      host: yourorg.sparkhost.com
+      organization: organization # Azure Databricks only
+      token: abc123
+      cluster: cluster
+
+      # optional
+      port: 444 # default: 443
+      user: user
+      connect_timeout: 60 # default 10
+      connect_retries: 5 # default 0

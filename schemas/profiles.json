@@ -48,7 +48,8 @@
                 { "$ref": "#definitions/postgresProfile" },
                 { "$ref": "#definitions/redshiftProfile" },
                 { "$ref": "#definitions/bigQueryProfile" },
-                { "$ref": "#definitions/snowflakeProfile" }
+                { "$ref": "#definitions/snowflakeProfile" },
+                { "$ref": "#definitions/sparkProfile" }
               ]
             },
             "required": [".*"]
@@ -380,6 +381,107 @@
             }
           },
           "required": ["authenticator"]
+        }
+      ]
+    },
+    "sparkProfile": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "spark",
+          "description": "Apache Spark Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/spark-profile"
+        },
+        "schema": {
+          "type": "string",
+          "description": "The schema to build models into."
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "user": {
+          "type": "string"
+        }
+      },
+      "required": ["type", "schema", "host", "port", "user"],
+      "oneOf": [
+        {
+          "properties": {
+            "method": {
+              "const": "odbc",
+              "description": "Use the odbc connection method if you are connecting to a Databricks SQL endpoint or interactive cluster via ODBC driver."
+            },
+            "driver": {
+              "type": "string",
+              "description": "path/to/driver"
+            },
+            "organization": {
+              "type": "string",
+              "description": "Organization id. Used for Azure Databricks only."
+            },
+            "token": {
+              "type": "string"
+            }
+          },
+          "required": ["method", "driver", "organization", "token"],
+          "oneOf": [
+            {
+              "properties": {
+                "endpoint": { "type": "string" }
+              },
+              "required": ["endpoint"]
+            },
+            {
+              "properties": {
+                "cluster": { "type": "string" }
+              },
+              "required": ["cluster"]
+            }
+          ]
+        },
+        {
+          "properties": {
+            "method": {
+              "const": "thrift",
+              "description": "Use the thrift connection method if you are connecting to a Thrift server sitting in front of a Spark cluster, e.g. a cluster running locally or on Amazon EMR."
+            },
+            "auth": {
+              "type": "string"
+            },
+            "kerberos_service_name": {
+              "type": "string"
+            }
+          },
+          "required": ["method", "auth", "kerberos_service_name"]
+        },
+        {
+          "properties": {
+            "method": {
+              "const": "http",
+              "description": "Use the http method if your Spark provider supports generic connections over HTTP (e.g. Databricks interactive cluster)."
+            },
+            "organization": {
+              "type": "string",
+              "description": "Organization id. Used for Azure Databricks only."
+            },
+            "token": {
+              "type": "string"
+            },
+            "cluster": {
+              "type": "string"
+            },
+            "connect_timeout": {
+              "type": "integer",
+              "description": "Databricks interactive clusters can take several minutes to start up. You may include the optional profile configs connect_timeout and connect_retries, and dbt will periodically retry the connection."
+            },
+            "connect_retries": {
+              "type": "integer",
+              "description": "Databricks interactive clusters can take several minutes to start up. You may include the optional profile configs connect_timeout and connect_retries, and dbt will periodically retry the connection."
+            }
+          },
+          "required": ["method", "organization", "token", "cluster"]
         }
       ]
     },

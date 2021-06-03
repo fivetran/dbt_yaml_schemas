@@ -3,19 +3,7 @@
     "./schemas/packages.json": "tests/packages.yml",
     "./schemas/dbt_project.json": "tests/dbt_project.yml",
     "./schemas/deployment.json": "tests/deployment.yml",
-    "./schemas/profiles.json": [
-      "tests/profiles-postgres.yml",
-      "tests/profiles-redshift-password.yml",
-      "tests/profiles-redshift-iam.yml",
-      "tests/profiles-bigquery-oauth-gcloud.yml",
-      "tests/profiles-bigquery-oauth-refresh-token.yml",
-      "tests/profiles-bigquery-oauth-temporary-token.yml",
-      "tests/profiles-bigquery-service-account-file.yml",
-      "tests/profiles-bigquery-service-account-json.yml",
-      "tests/profiles-snowflake-user-password.yml",
-      "tests/profiles-snowflake-key-pair.yml",
-      "tests/profiles-snowflake-sso.yml"
-    ],
+    "./schemas/profiles.json": ["tests/profiles.yml/*.yml"],
     "./schemas/resources.json": ["tests/resources/*.yml"]
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
