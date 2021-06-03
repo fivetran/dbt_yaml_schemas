@@ -1,0 +1,552 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gitcdn.xyz/repo/fivetran/dbt_yaml_schemas/main/schemas/dbt_project.json",
+  "title": "dbt resource configuration",
+  "description": "Contains configuration of dbt resources",
+
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "number",
+      "default": 2
+    },
+
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/definitions/resource/properties/name",
+            "description": "The name of the model you are declaring properties for. Must match the filename of a model."
+          },
+          "description": {
+            "$ref": "#/definitions/resource/properties/description"
+          },
+          "docs": {
+            "$ref": "#/definitions/resource/properties/docs"
+          },
+          "meta": {
+            "$ref": "#/definitions/resource/properties/meta"
+          },
+          "tests": {
+            "$ref": "#/definitions/resource/properties/tests"
+          },
+          "columns": {
+            "$ref": "#/definitions/resource/properties/columns"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["name"]
+      }
+    },
+
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/definitions/resource/properties/name"
+          },
+          "description": {
+            "$ref": "#/definitions/resource/properties/description"
+          },
+          "database": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The database where the source is stored.\nThis parameter is useful if you want to use a source name that differs from the schema name.\nIf you're using BigQuery, use the project name as the database property."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The schema name as stored in the database.\nNote that to use this parameter, your warehouse must allow cross-database queries.\nIf you're using BigQuery, use the dataset name as the schema: property."
+          },
+          "loader": {
+            "type": "string",
+            "description": "Describe the tool that loads this source into your warehouse. Note that this property is for documentation purposes only — dbt does not meaningfully use this."
+          },
+          "loaded_at_field": {
+            "type": "string",
+            "minLength": 1,
+            "description": "A column name or expression that returns a timestamp indicating freshness."
+          },
+          "meta": {
+            "$ref": "#/definitions/resource/properties/meta"
+          },
+          "tags": {
+            "$ref": "#/definitions/resource/properties/tags"
+          },
+          "overrides": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Override a source defined in an included package. The properties defined in the overriding source will be applied on top of the base properties of the overridden source."
+          },
+          "freshness": {
+            "$ref": "#/definitions/resource/properties/freshness"
+          },
+          "quoting": {
+            "$ref": "./dbt_project.json#/properties/quoting"
+          },
+          "tables": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "$ref": "#/definitions/resource/properties/name"
+                },
+                "description": {
+                  "$ref": "#/definitions/resource/properties/description"
+                },
+                "meta": {
+                  "$ref": "#/definitions/resource/properties/meta"
+                },
+                "identifier": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The table name as stored in the database.\nBy default, dbt will use the table's 'name' parameter as the identifier."
+                },
+                "loaded_at_field": {
+                  "$ref": "#/properties/sources/items/properties/loaded_at_field"
+                },
+                "tests": {
+                  "$ref": "#/definitions/resource/properties/tests"
+                },
+                "tags": {
+                  "$ref": "#/definitions/resource/properties/tags"
+                },
+                "freshness": {
+                  "$ref": "#/definitions/resource/properties/freshness"
+                },
+                "quoting": {
+                  "$ref": "./dbt_project.json#/properties/quoting"
+                },
+                "columns": {
+                  "$ref": "#/definitions/resource/properties/columns"
+                }
+              },
+              "additionalProperties": false,
+              "required": ["name"]
+            }
+          }
+        },
+        "required": ["name"]
+      }
+    },
+
+    "seeds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/definitions/resource/properties/name"
+          },
+          "description": {
+            "$ref": "#/definitions/resource/properties/description"
+          },
+          "docs": {
+            "$ref": "#/definitions/resource/properties/docs"
+          },
+          "tests": {
+            "$ref": "#/definitions/resource/properties/tests"
+          },
+          "columns": {
+            "$ref": "#/definitions/resource/properties/columns"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["name"]
+      }
+    },
+
+    "snapshots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/definitions/resource/properties/name"
+          },
+          "description": {
+            "$ref": "#/definitions/resource/properties/description"
+          },
+          "meta": {
+            "$ref": "#/definitions/resource/properties/meta"
+          },
+          "docs": {
+            "$ref": "#/definitions/resource/properties/docs"
+          },
+          "tests": {
+            "$ref": "#/definitions/resource/properties/tests"
+          },
+          "columns": {
+            "$ref": "#/definitions/resource/properties/columns"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["name"]
+      }
+    },
+
+    "analyses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/definitions/resource/properties/name"
+          },
+          "description": {
+            "$ref": "#/definitions/resource/properties/description"
+          },
+          "docs": {
+            "$ref": "#/definitions/resource/properties/docs"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "$ref": "#/definitions/resource/properties/name"
+                },
+                "description": {
+                  "$ref": "#/definitions/resource/properties/description"
+                }
+              },
+              "additionalProperties": false,
+              "required": ["name"]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": ["name"]
+      }
+    },
+
+    "macros": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/definitions/resource/properties/name"
+          },
+          "description": {
+            "$ref": "#/definitions/resource/properties/description"
+          },
+          "docs": {
+            "$ref": "#/definitions/resource/properties/docs"
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "$ref": "#/definitions/resource/properties/name"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The data type of the argument. This is only used for documentation purposes — there are no restrictions on the values you can use here."
+                },
+                "description": {
+                  "$ref": "#/definitions/resource/properties/description"
+                }
+              },
+              "additionalProperties": false,
+              "required": ["name"]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": ["name"]
+      }
+    },
+
+    "exposures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/definitions/resource/properties/name"
+          },
+          "description": {
+            "$ref": "#/definitions/resource/properties/description"
+          },
+          "type": {
+            "enum": ["dashboard", "notebook", "analysis", "ml", "application"]
+          },
+          "url": {
+            "type": "string"
+          },
+          "maturity": {
+            "enum": ["high", "medium", "low"]
+          },
+          "owner": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": ["email"]
+          },
+          "depends_on": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": ["name", "type"]
+      }
+    }
+  },
+
+  "additionalProperties": false,
+
+  "definitions": {
+    "resource": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Object name."
+        },
+
+        "description": {
+          "type": "string",
+          "description": "A user-defined description.\nThese descriptions are used in the documentation website rendered by dbt.\nDescriptions can include markdown, as well as the 'doc' jinja function."
+        },
+
+        "docs": {
+          "type": "object",
+          "properties": {
+            "show": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether the resource is shown in the auto-generated documentation website.\nHidden resources will still appear in the dbt DAG visualization, but will be identified as 'hidden'."
+            }
+          },
+          "description": "Documentation-specific configuration.",
+          "additionalProperties": false
+        },
+
+        "meta": {
+          "type": "object",
+          "description": "The metadata that is compiled into the 'manifest.json' file generated by dbt, and is viewable in the auto-generated documentation."
+        },
+
+        "quote": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables or disables quoting for column names."
+        },
+
+        "tests": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "const": "not_null",
+                "description": "Validates that there are no null values present in a column."
+              },
+              {
+                "const": "unique",
+                "description": "Validates that there are no duplicate values present in a field."
+              },
+              {
+                "type": "string",
+                "description": "Custom test"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "acceptedValues": {
+                    "type": "object",
+                    "properties": {
+                      "values": {
+                        "type": "array"
+                      },
+                      "quote": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If true, it will single-quote the list of accepted values in the test query. To test non-strings values explicitly set it to false."
+                      },
+                      "severity": {
+                        "$ref": "#/definitions/resource/properties/testSeverity"
+                      },
+                      "tags": {
+                        "$ref": "#/definitions/resource/properties/tags"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": ["values"],
+                    "description": "Validates that all of the values in a column are present in a supplied list of values. If any values other than those provided in the list are present, then the test will fail."
+                  },
+
+                  "relationships": {
+                    "type": "object",
+                    "properties": {
+                      "to": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Parent table name. Can be expressed by 'ref' or 'source' functions"
+                      },
+                      "field": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Parent field name"
+                      },
+                      "severity": {
+                        "$ref": "#/definitions/resource/properties/testSeverity"
+                      },
+                      "tags": {
+                        "$ref": "#/definitions/resource/properties/tags"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": ["to", "field"],
+                    "description": "Validates that all of the records in a child table have a corresponding record in a parent table. This property is referred to as 'referential integrity'."
+                  },
+
+                  "not_null": {
+                    "type": "object",
+                    "properties": {
+                      "severity": {
+                        "$ref": "#/definitions/resource/properties/testSeverity"
+                      },
+                      "tags": {
+                        "$ref": "#/definitions/resource/properties/tags"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Validates that there are no duplicate values present in a field."
+                  },
+
+                  "unique": {
+                    "type": "object",
+                    "properties": {
+                      "column_name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Column expression for testing multiple columns"
+                      },
+                      "severity": {
+                        "$ref": "#/definitions/resource/properties/testSeverity"
+                      },
+                      "tags": {
+                        "$ref": "#/definitions/resource/properties/tags"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Validates that there are no duplicate values present in a field."
+                  }
+                },
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "severity": {
+                      "$ref": "#/definitions/resource/properties/testSeverity"
+                    },
+                    "tags": {
+                      "$ref": "#/definitions/resource/properties/tags"
+                    }
+                  },
+                  "description": "Custom test"
+                },
+                "minProperties": 1,
+                "maxProperties": 1
+              }
+            ]
+          },
+          "description": "The tests are used to assert properties of a column or table.\nOnce these tests are defined, you can validate their correctness by running 'dbt test'."
+        },
+
+        "testSeverity": {
+          "type": "string",
+          "default": "error",
+          "enum": ["warn", "error"],
+          "description": "If severity is 'warn', dbt will log a warning for the failing test, but the test will still be considered passing."
+        },
+
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tags used to select resources."
+        },
+
+        "freshness": {
+          "type": "object",
+          "properties": {
+            "warn_after": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "number",
+                  "minimum": 1,
+                  "description": "A positive integer for the number of periods where a data source is still considered 'fresh'."
+                },
+                "period": {
+                  "enum": ["minute", "hour", "day"],
+                  "description": "The time period used in the freshness calculation."
+                }
+              },
+              "additionalProperties": false,
+              "required": ["count", "period"]
+            },
+            "error_after": {
+              "$ref": "#/definitions/resource/properties/freshness/properties/warn_after"
+            },
+            "filter": {
+              "type": "string",
+              "description": "Adds a where clause to the query run by 'dbt source snapshot-freshness' in order to limit data scanned."
+            }
+          },
+          "additionalProperties": false,
+          "description": "Defines the acceptable amount of time between the most recent record, and now, for a table to be considered 'fresh'."
+        },
+
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/definitions/resource/properties/name"
+              },
+              "description": {
+                "$ref": "#/definitions/resource/properties/description"
+              },
+              "meta": {
+                "$ref": "#/definitions/resource/properties/meta"
+              },
+              "quote": {
+                "$ref": "#/definitions/resource/properties/quote"
+              },
+              "tests": {
+                "$ref": "#/definitions/resource/properties/tests"
+              },
+              "tags": {
+                "$ref": "#/definitions/resource/properties/tags"
+              }
+            },
+            "required": ["name"],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  }
+}

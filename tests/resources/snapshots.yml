@@ -1,0 +1,14 @@
+version: 2
+
+snapshots:
+  - name: snapshot
+    description: snapshot
+    meta:
+      key: value
+    docs:
+      show: true
+    columns:
+      - name: id
+        quote: false
+    tests:
+      - not_null

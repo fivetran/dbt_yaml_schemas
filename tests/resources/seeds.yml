@@ -1,0 +1,12 @@
+version: 2
+
+seeds:
+  - name: seed
+    description: seed
+    docs:
+      show: true
+    tests:
+      - not_null
+    columns:
+      - name: id
+        quote: false

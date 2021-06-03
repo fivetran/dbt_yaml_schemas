@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: model
+    description: description
+    docs:
+      show: true
+    meta:
+      key: value
+    tests:
+      - not_null
+      - unique
+      - acceptedValues:
+          values: [a, b, c]
+          quote: true
+          severity: warn
+          tags: [tag]
+      - relationships:
+          to: table
+          field: id
+          severity: error
+          tags: [tag]
+      - not_null:
+          severity: warn
+          tags: [tag]
+      - unique:
+          severity: warn
+          column_name: id + date
+          tags: [tag]
+      - custom_test
+      - custom_test:
+          severity: warn
+          tags: [tag]
+    columns:
+      - name: id
+        quote: false
+        description: column
+        meta:
+          key: value
+        tags: [tag]
+        tests:
+          - not_null

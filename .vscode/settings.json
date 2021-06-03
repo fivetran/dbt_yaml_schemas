@@ -15,7 +15,8 @@
       "tests/profiles-snowflake-user-password.yml",
       "tests/profiles-snowflake-key-pair.yml",
       "tests/profiles-snowflake-sso.yml"
-    ]
+    ],
+    "./schemas/resources.json": ["tests/resources/*.yml"]
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.configPath": ".prettierrc",

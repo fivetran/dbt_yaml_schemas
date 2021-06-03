@@ -1,0 +1,11 @@
+version: 2
+
+macros:
+  - name: macro
+    description: macro
+    docs:
+      show: true
+    arguments:
+      - name: id
+        type: string
+        description: description

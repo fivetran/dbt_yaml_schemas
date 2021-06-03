@@ -1,0 +1,10 @@
+version: 2
+
+analyses:
+  - name: analysis
+    description: analysis
+    docs:
+      show: true
+    columns:
+      - name: id
+        description: description

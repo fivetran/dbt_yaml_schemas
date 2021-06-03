@@ -1,0 +1,13 @@
+version: 2
+
+exposures:
+  - name: exposure
+    type: dashboard
+    maturity: high
+    url: url
+    description: description
+    depends_on:
+      - ref('table')
+    owner:
+      name: name
+      email: email
