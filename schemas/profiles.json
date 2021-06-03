@@ -46,7 +46,8 @@
             ".*": {
               "oneOf": [
                 { "$ref": "#definitions/postgresProfile" },
-                { "$ref": "#definitions/redshiftProfile" }
+                { "$ref": "#definitions/redshiftProfile" },
+                { "$ref": "#definitions/bigQueryProfile" }
               ]
             },
             "required": [".*"]
@@ -108,7 +109,6 @@
         "properties": { "method": { "const": "iam" } }
       },
       "then": {
-        // IAM authentication
         "properties": {
           "cluster_id": {
             "type": "string"
@@ -130,15 +130,176 @@
         "required": ["cluster_id"]
       },
       "else": {
-        // Password-based authentication
         "allOf": [{ "$ref": "#definitions/passwordField" }],
         "properties": {
           "postal_code": { "pattern": "[A-Z][0-9][A-Z] [0-9][A-Z][0-9]" }
         }
       }
     },
+    "bigQueryProfile": {
+      "type": "object",
+      "allOf": [{ "$ref": "#definitions/threadsField" }],
+      "properties": {
+        "type": {
+          "const": "bigquery",
+          "description": "BigQuery Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/bigquery-profile"
+        },
+        "project": {
+          "type": "string",
+          "description": "GCP project id"
+        },
+        "dataset": {
+          "type": "string",
+          "description": "The name of your dbt dataset"
+        },
+        "timeout_seconds": {
+          "type": "integer"
+        },
+        "priority": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "method",
+        "project",
+        "dataset",
+        "timeout_seconds",
+        "priority"
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "method": { "const": "oauth" },
+            "location": {
+              "enum": ["US", "EU"]
+            },
+            "retries": {
+              "type": "integer"
+            }
+          },
+          "required": ["retries"]
+        },
+        {
+          "$comment": "https://docs.getdbt.com/reference/warehouse-profiles/bigquery-profile#oauth-token-based",
+          "type": "object",
+          "properties": {
+            "method": { "const": "oauth-secrets" },
+            "location": {
+              "enum": ["US", "EU"]
+            },
+            "retries": {
+              "type": "integer"
+            }
+          },
+          "required": ["retries"],
+          "oneOf": [
+            {
+              "properties": {
+                "refresh_token": {
+                  "type": "string"
+                },
+                "client_id": {
+                  "type": "string"
+                },
+                "client_secret": {
+                  "type": "string"
+                },
+                "token_uri": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "refresh_token",
+                "client_id",
+                "client_secret",
+                "token_uri"
+              ]
+            },
+            {
+              "properties": {
+                "token": {
+                  "type": "string"
+                }
+              },
+              "required": ["token"]
+            }
+          ]
+        },
+        {
+          "$comment": "https://docs.getdbt.com/reference/warehouse-profiles/bigquery-profile#service-account-file",
+          "type": "object",
+          "properties": {
+            "method": { "const": "service-account" },
+            "keyfile": {
+              "type": "string"
+            },
+            "retries": {
+              "type": "integer"
+            }
+          },
+          "required": ["keyfile", "retries"]
+        },
+        {
+          "$comment": "https://docs.getdbt.com/reference/warehouse-profiles/bigquery-profile#service-account-json",
+          "type": "object",
+          "properties": {
+            "method": { "const": "service-account-json" },
+            "keyfile_json": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "project_id": {
+                  "type": "string"
+                },
+                "private_key_id": {
+                  "type": "string"
+                },
+                "private_key": {
+                  "type": "string"
+                },
+                "client_email": {
+                  "type": "string"
+                },
+                "client_id": {
+                  "type": "string"
+                },
+                "auth_uri": {
+                  "type": "string"
+                },
+                "token_uri": {
+                  "type": "string"
+                },
+                "auth_provider_x509_cert_url": {
+                  "type": "string"
+                },
+                "client_x509_cert_url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "project_id",
+                "private_key_id",
+                "private_key",
+                "client_email",
+                "client_id",
+                "auth_uri",
+                "token_uri",
+                "auth_provider_x509_cert_url",
+                "client_x509_cert_url"
+              ]
+            }
+          },
+          "required": ["keyfile_json"]
+        }
+      ]
+    },
     "common": {
       "type": "object",
+      "allOf": [{ "$ref": "#definitions/threadsField" }],
       "properties": {
         "host": {
           "type": "string"
@@ -155,22 +316,9 @@
         "schema": {
           "type": "string",
           "description": "The default schema that dbt will build objects in."
-        },
-        "threads": {
-          "type": "integer",
-          "default": 1,
-          "description": "The number of threads the dbt project will run on."
         }
       },
-      "required": [
-        "type",
-        "host",
-        "user",
-        "port",
-        "dbname",
-        "schema",
-        "threads"
-      ]
+      "required": ["type", "host", "user", "port", "dbname", "schema"]
     },
     "passwordField": {
       "type": "object",
@@ -190,6 +338,17 @@
         }
       },
       "required": ["keepalives_idle"]
+    },
+    "threadsField": {
+      "type": "object",
+      "properties": {
+        "threads": {
+          "type": "integer",
+          "default": 1,
+          "description": "The number of threads the dbt project will run on."
+        }
+      },
+      "required": ["threads"]
     }
   }
 }
