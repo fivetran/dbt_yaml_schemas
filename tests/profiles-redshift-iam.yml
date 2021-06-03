@@ -1,0 +1,27 @@
+config:
+  partial_parse: false
+  use_colors: false
+  printer_width: 10
+  send_anonymous_usage_stats: false
+fivetran:
+  target: dev
+  outputs:
+    dev:
+      type: redshift
+      method: iam
+      cluster_id: cluster_id
+      host: hostname.region.redshift.amazonaws.com
+      user: alice
+      iam_profile: data_engineer # optional
+      iam_duration_seconds: 900 # optional
+      autocreate: true # optional
+      db_groups: ["analysts"] # optional
+
+      # Other Redshift configs:
+      port: 5439
+      dbname: analytics
+      schema: analytics
+      threads: 4
+      keepalives_idle: 0 # default 0, indicating the system default
+      search_path: public # optional, but not recommended
+      sslmode: sslmode

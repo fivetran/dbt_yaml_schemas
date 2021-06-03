@@ -2,7 +2,12 @@
   "yaml.schemas": {
     "./schemas/packages.json": "tests/packages.yml",
     "./schemas/dbt_project.json": "tests/dbt_project.yml",
-    "./schemas/deployment.json": "tests/deployment.yml"
+    "./schemas/deployment.json": "tests/deployment.yml",
+    "./schemas/profiles.json": [
+      "tests/profiles-postgres.yml",
+      "tests/profiles-redshift-password.yml",
+      "tests/profiles-redshift-iam.yml"
+    ]
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.configPath": ".prettierrc",

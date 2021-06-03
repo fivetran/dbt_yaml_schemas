@@ -1,0 +1,21 @@
+config:
+  partial_parse: false
+  use_colors: false
+  printer_width: 10
+  send_anonymous_usage_stats: false
+fivetran:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: hostname
+      user: username
+      password: password
+      port: 123
+      dbname: database_name
+      schema: dbt_schema
+      threads: 1
+      keepalives_idle: 0 # default 0, indicating the system default
+      search_path: search_path
+      role: role
+      sslmode: sslmode

@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gitcdn.xyz/repo/fivetran/dbt_yaml_schemas/main/schemas/profiles.json",
+  "title": "profiles.yml",
+  "description": "Contains configuration for connecting dbt to your destination. See https://docs.getdbt.com/reference/profiles.yml.",
+  "type": "object",
+  "additionalProperties": false,
+  "patternProperties": {
+    "config": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Contains not database specific options.",
+      "properties": {
+        "partial_parse": {
+          "type": "boolean",
+          "description": "Partial parsing can improve the performance characteristics of dbt runs by limiting the number of files that are parsed by dbt.\nSee https://docs.getdbt.com/reference/profiles.yml#partial_parse.\nDefault: false."
+        },
+
+        "use_colors": {
+          "type": "boolean",
+          "description": "By default, dbt will colorize the output it prints in your terminal. You can turn this on and off using this option.\nDefault: true."
+        },
+
+        "printer_width": {
+          "type": "integer",
+          "description": "By default, dbt will print out lines padded to 80 characters wide. You can change it using this option."
+        },
+
+        "send_anonymous_usage_stats": {
+          "type": "boolean",
+          "description": "Whether to send anonymous usage statistics or not.\nDefault: true."
+        }
+      }
+    },
+    ".*": {
+      "description": "The name of the profile. Contains all the details required to connect to your data warehouse. sure that this is the same name as the profile indicated in your dbt_project.yml file.",
+      "additionalProperties": false,
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "This is the default target your dbt project will use. It must be one of the targets you define in your profile. Commonly it is set to dev."
+        },
+        "outputs": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "oneOf": [
+                { "$ref": "#definitions/postgresProfile" },
+                { "$ref": "#definitions/redshiftProfile" }
+              ]
+            },
+            "required": [".*"]
+          }
+        }
+      },
+      "required": ["target", "outputs"]
+    }
+  },
+  "definitions": {
+    "postgresProfile": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#definitions/common" },
+        { "$ref": "#definitions/passwordField" },
+        { "$ref": "#definitions/keepalivesIdleField" }
+      ],
+      "properties": {
+        "type": {
+          "const": "postgres",
+          "description": "Postgres Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/postgres-profile"
+        },
+        "search_path": {
+          "type": "string",
+          "description": "Controls the Postgres \"search path\" that dbt configures when opening new connections to the database. By default, the Postgres search path is \"$user, public\", meaning that unqualified table names will be searched for in the public schema, or a schema with the same name as the logged-in user. Note: Setting the search_path to a custom value is not necessary or recommended for typical usage of dbt."
+        },
+        "role": {
+          "type": "string",
+          "description": "Controls the Postgres role that dbt assumes when opening new connections to the database."
+        },
+        "sslmode": {
+          "type": "string",
+          "description": "Controls how dbt connectes to Postgres databases using SSL. See the Postgres docs on sslmode for usage information. When unset, dbt will connect to databases using the Postgres default, prefer, as the sslmode."
+        }
+      }
+    },
+    "redshiftProfile": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#definitions/common" },
+        { "$ref": "#definitions/keepalivesIdleField" }
+      ],
+      "properties": {
+        "type": {
+          "const": "redshift",
+          "description": "Redshift Profile.\nhttps://docs.getdbt.com/reference/warehouse-profiles/redshift-profile"
+        },
+        "search_path": {
+          "type": "string",
+          "default": "public"
+        },
+        "sslmode": {
+          "type": "string",
+          "description": "Sets the sslmode used to connect to the database (in case this parameter is set, will look for ca in ~/.postgresql/root.crt)"
+        }
+      },
+      "if": {
+        "required": ["method"],
+        "properties": { "method": { "const": "iam" } }
+      },
+      "then": {
+        // IAM authentication
+        "properties": {
+          "cluster_id": {
+            "type": "string"
+          },
+          "iam_profile": {
+            "type": "string",
+            "description": "When value is set, dbt will use the specified profile from your ~/.aws/config file instead of using the profile name default."
+          },
+          "iam_duration_seconds": {
+            "type": "integer"
+          },
+          "autocreate": {
+            "type": "boolean"
+          },
+          "db_groups": {
+            "type": "array"
+          }
+        },
+        "required": ["cluster_id"]
+      },
+      "else": {
+        // Password-based authentication
+        "allOf": [{ "$ref": "#definitions/passwordField" }],
+        "properties": {
+          "postal_code": { "pattern": "[A-Z][0-9][A-Z] [0-9][A-Z][0-9]" }
+        }
+      }
+    },
+    "common": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "dbname": {
+          "type": "string"
+        },
+        "schema": {
+          "type": "string",
+          "description": "The default schema that dbt will build objects in."
+        },
+        "threads": {
+          "type": "integer",
+          "default": 1,
+          "description": "The number of threads the dbt project will run on."
+        }
+      },
+      "required": [
+        "type",
+        "host",
+        "user",
+        "port",
+        "dbname",
+        "schema",
+        "threads"
+      ]
+    },
+    "passwordField": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": ["password"]
+    },
+    "keepalivesIdleField": {
+      "type": "object",
+      "properties": {
+        "keepalives_idle": {
+          "type": "integer",
+          "default": 0
+        }
+      },
+      "required": ["keepalives_idle"]
+    }
+  }
+}
