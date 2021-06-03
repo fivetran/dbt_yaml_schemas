@@ -3,7 +3,7 @@
     "./schemas/packages.json": "tests/packages.yml",
     "./schemas/dbt_project.json": "tests/dbt_project.yml",
     "./schemas/deployment.json": "tests/deployment.yml",
-    "./schemas/profiles.json": ["tests/profiles.yml/*.yml"],
+    "./schemas/profiles.json": ["tests/profiles/*.yml"],
     "./schemas/resources.json": ["tests/resources/*.yml"]
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
