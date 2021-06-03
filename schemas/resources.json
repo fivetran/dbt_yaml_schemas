@@ -86,7 +86,20 @@
             "$ref": "#/definitions/resource/properties/freshness"
           },
           "quoting": {
-            "$ref": "./dbt_project.json#/properties/quoting"
+            "type": "object",
+            "properties": {
+              "database": {
+                "type": "boolean"
+              },
+              "schema": {
+                "type": "boolean"
+              },
+              "identifier": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "description": "Whether dbt should quote databases, schemas, and identifiers when creating relations (tables/views) or when resolving a ref function to a direct relation reference.\nThe default values vary by database.\nNote that for BigQuery quoting configuration, 'database' and 'schema' should be used here, though these configs will apply to project and dataset names respectively."
           },
           "tables": {
             "type": "array",
