@@ -8,6 +8,20 @@ This repository contains JSON schemas that provide validation, autocomplete and 
 - resource configuration files located in various subfolders of dbt project
 - Fivetran `deployment.yml` file
 
+---
+
+![Autocomplete](images/autocomplete.png)
+
+---
+
+![Invalid value](images/invalid_value.png)
+
+---
+
+![Missing property](images/missing_property.png)
+
+---
+
 # Installation and configuration
 
 First you need to install [YAML extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) for VSCode.
