@@ -153,10 +153,14 @@
           "description": "The name of your dbt dataset"
         },
         "timeout_seconds": {
-          "type": "integer"
+          "type": "integer",
+          "default": 300,
+          "description": "BigQuery supports query timeouts. By default, the timeout is set to 300 seconds. If a dbt model takes longer than this timeout to complete, then BigQuery may cancel the query."
         },
         "priority": {
-          "type": "string"
+          "type": "string",
+          "enum": ["batch", "interactive"],
+          "description": "The priority for the BigQuery jobs that dbt executes can be configured with the priority configuration in your BigQuery profile. This field can be set to one of batch or interactive. For more information on query priority, consult the BigQuery documentation."
         }
       },
       "required": [
@@ -169,13 +173,18 @@
       ],
       "oneOf": [
         {
+          "$comment": "https://docs.getdbt.com/reference/warehouse-profiles/bigquery-profile#oauth-via-gcloud",
+          "allOf": [
+            { "$ref": "#definitions/retriesField" },
+            { "$ref": "#definitions/locationField" }
+          ],
           "properties": {
             "method": { "const": "oauth" },
-            "location": {
-              "enum": ["US", "EU"]
-            },
-            "retries": {
+            "maximum_bytes_billed": {
               "type": "integer"
+            },
+            "impersonate_service_account": {
+              "type": "string"
             }
           },
           "required": ["retries"]
@@ -183,21 +192,20 @@
         {
           "$comment": "https://docs.getdbt.com/reference/warehouse-profiles/bigquery-profile#oauth-token-based",
           "type": "object",
+          "allOf": [
+            { "$ref": "#definitions/retriesField" },
+            { "$ref": "#definitions/locationField" }
+          ],
           "properties": {
-            "method": { "const": "oauth-secrets" },
-            "location": {
-              "enum": ["US", "EU"]
-            },
-            "retries": {
-              "type": "integer"
-            }
+            "method": { "const": "oauth-secrets" }
           },
           "required": ["retries"],
           "oneOf": [
             {
               "properties": {
                 "refresh_token": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Using the refresh token and client information, dbt will mint new access tokens as necessary."
                 },
                 "client_id": {
                   "type": "string"
@@ -219,7 +227,8 @@
             {
               "properties": {
                 "token": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "dbt will use the one-time access token, no questions asked. This approach makes sense if you have an external deployment process that can mint new access tokens and update the profile file accordingly."
                 }
               },
               "required": ["token"]
@@ -229,13 +238,12 @@
         {
           "$comment": "https://docs.getdbt.com/reference/warehouse-profiles/bigquery-profile#service-account-file",
           "type": "object",
+          "allOf": [{ "$ref": "#definitions/retriesField" }],
           "properties": {
             "method": { "const": "service-account" },
             "keyfile": {
-              "type": "string"
-            },
-            "retries": {
-              "type": "integer"
+              "type": "string",
+              "description": "/path/to/bigquery/keyfile.json"
             }
           },
           "required": ["keyfile", "retries"]
@@ -349,6 +357,24 @@
         }
       },
       "required": ["threads"]
+    },
+    "retriesField": {
+      "type": "object",
+      "properties": {
+        "retries": {
+          "type": "integer",
+          "description": "The number of times dbt should retry queries that result in unhandled server errors."
+        }
+      }
+    },
+    "locationField": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "anyOf": [{ "const": "US" }, { "const": "EU" }, { "type": "string" }],
+          "description": "The location of BigQuery datasets can be configured using the location configuration in a BigQuery profile. location may be iether a multi-regional location (e.g. EU, US), or a regional location (e.g. us-west2) as per the the BigQuery documentation describes."
+        }
+      }
     }
   }
 }
