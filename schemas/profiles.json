@@ -618,8 +618,7 @@
           "type": "integer",
           "default": 0
         }
-      },
-      "required": ["keepalives_idle"]
+      }
     },
 
     "threadsField": {
@@ -638,6 +637,7 @@
       "properties": {
         "retries": {
           "type": "integer",
+          "default": 1,
           "description": "The number of times dbt should retry queries that result in unhandled server errors."
         }
       }
