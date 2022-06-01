@@ -309,6 +309,86 @@
         "additionalProperties": false,
         "required": ["name", "type"]
       }
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/definitions/resource/properties/name",
+            "description": "A unique identifier for the metric"
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The dbt model that powers this metric"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "description": "A short for name / label for the metric"
+          },
+          "description": {
+            "$ref": "#/definitions/resource/properties/description",
+            "description": "Long form, human-readable description for the metric"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of calculation to perform when evaluating a metric"
+          },
+          "sql": {
+            "type": "string",
+            "description": "The expression to aggregate/calculate over"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "The time-based component of the metric"
+          },
+          "time_grains": {
+            "type": "array",
+            "items": {
+              "enum": ["day", "week", "month", "quarter", "year"]
+            },
+            "description": "One or more \"grains\" at which the metric can be evaluated"
+          },
+          "dimensions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "A list of dimensions to group or filter the metric by"
+            }
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "description": "Field (column) to be compared"
+                },
+                "operator": {
+                  "enum": ["is", "is not", "=", ">=", "<=", "!="],
+                  "description": "comparison operation"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Note that value must be defined as a string in YAML, because it will be compiled into queries as part of a string. If your filter's value needs to be surrounded in quotes inside the query (e.g. text or dates), use \"'nested'\" quotes"
+                }
+              },
+              "description": "A list of filters to apply before calculating the metric",
+              "additionalProperties": false,
+              "required": ["field", "operator", "value"]
+            }
+          },
+          "meta": {
+            "$ref": "#/definitions/resource/properties/meta"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["name", "model", "type", "sql", "timestamp", "time_grains"]
+      }
     }
   },
 
