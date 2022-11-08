@@ -371,7 +371,7 @@
               {
                 "type": "object",
                 "properties": {
-                  "acceptedValues": {
+                  "accepted_values": {
                     "type": "object",
                     "properties": {
                       "values": {
